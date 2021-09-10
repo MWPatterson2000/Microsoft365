@@ -171,29 +171,27 @@ ForEach ($policy in $Script:CAPolicies) {
 }
 #>
 
-<#
+#<#
 # Find MFA for All Users
 ForEach ($policy in $Script:CAPolicies) {
     #Write-Host $policy.DisplayName
     If ($policy.GrantControlBuiltInControls.Contains('Mfa')) {
-        #Write-Host "MFA Found:"$policy.DisplayName
-        #Write-Host $policy.GrantControlBuiltInControls
-        If ($policy.userRiskLevels -eq '') {
-            If ($policy.UserIncludeUsers.Contains('All')) {
-                Write-Host "MFA All Found:"$policy.DisplayName
+        If ($policy.clientAppTypes -eq 'ExchangeActiveSync,Browser,MobileAppsAndDesktopClients,Other') {
+            If ($policy.ApplicationIncludeApplications -eq 'All') {
+                If ($policy.UserIncludeUsers.Contains('All')) {
+                    Write-Host "MFA All Found:"$policy.DisplayName
+                }
             }
         }
     }
 }
 #>
 
-#<#
+<#
 # Find block legacy authentication 
 ForEach ($policy in $Script:CAPolicies) {
     #Write-Host $policy.DisplayName
     If ($policy.GrantControlBuiltInControls.Contains('Block')) {
-        #Write-Host "MFA Found:"$policy.DisplayName
-        #Write-Host $policy.GrantControlBuiltInControls
         If ($policy.clientAppTypes -eq 'ExchangeActiveSync,Other') {
             If ($policy.UserIncludeUsers.Contains('All')) {
                 Write-Host "block legacy authentication Found:"$policy.DisplayName
