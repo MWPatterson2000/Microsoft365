@@ -12,11 +12,10 @@
 # Export File
 $exportFile = "C:\Temp\$(Get-Date -Format yyyy-MM-dd-HH-mm) - AAD - CA Policies.csv"
 
-#Get Conditional Access Policies   
+#Get Conditional Access Policies
 $tempAR = @(Get-AzureADMSConditionalAccessPolicy)
-
-$Policies = @()
-
+# Build Array for output
+$Script:CAPolicies = @()
 # Build Export Array
 $count = @(($tempAR).Displayname).Count
 $count = $count - 1
@@ -38,11 +37,47 @@ for ($num = 0 ; $num -le $count ; $num++) {
     $ApplicationIncludeUserActions = ((($tempAR[$num]).conditions).Applications).IncludeUserActions -join ','
     $ApplicationIncludeAuthenticationContextClassReferences = ((($tempAR[$num]).conditions).Applications).includeAuthenticationContextClassReferences -join ','
     $UserIncludeUsers = ((($tempAR[$num]).conditions).Users).IncludeUsers -join ','
+    If (((($tempAR[$num]).conditions).Users).IncludeUsers -ne '') {
+        If (((($tempAR[$num]).conditions).Users).IncludeUsers -ne 'All') {
+            $UserIncludeUsersName = Get-AzureADObjectByObjectId -ObjectIds ((($tempAR[$num]).conditions).Users).IncludeUsers
+            $UserIncludeUsersName = ($UserIncludeUsersName).UserPrincipalName -join ","
+        }
+    }
     $UserExcludeUsers = ((($tempAR[$num]).conditions).Users).ExcludeUsers -join ','
+    If (((($tempAR[$num]).conditions).Users).ExcludeUsers -ne '') {
+        If (((($tempAR[$num]).conditions).Users).ExcludeUsers -ne 'All') {
+            $UserExcludeUsersName = Get-AzureADObjectByObjectId -ObjectIds ((($tempAR[$num]).conditions).Users).ExcludeUsers
+            $UserExcludeUsersName = ($UserExcludeUsersName).UserPrincipalName -join ","
+        }
+    }
     $UserIncludeGroups = ((($tempAR[$num]).conditions).Users).IncludeGroups -join ','
+    If (((($tempAR[$num]).conditions).Users).IncludeGroups -ne '') {
+        If (((($tempAR[$num]).conditions).Users).IncludeGroups -ne 'All') {
+            $UserIncludeGroupsName = Get-AzureADObjectByObjectId -ObjectIds ((($tempAR[$num]).conditions).Users).IncludeGroups
+            $UserIncludeGroupsName = ($UserIncludeGroupsName).UserPrincipalName -join ","
+        }
+    }
     $UserExcludeGroups = ((($tempAR[$num]).conditions).Users).ExcludeGroups -join ','
+    If (((($tempAR[$num]).conditions).Users).ExcludeGroups -ne '') {
+        If (((($tempAR[$num]).conditions).Users).ExcludeGroups -ne 'All') {
+            $UserExcludeGroupsName = Get-AzureADObjectByObjectId -ObjectIds ((($tempAR[$num]).conditions).Users).ExcludeGroups
+            $UserExcludeGroupsName = ($UserExcludeGroupsName).UserPrincipalName -join ","
+        }
+    }
     $UserIncludeRoles = ((($tempAR[$num]).conditions).Users).IncludeRoles -join ','
+    If (((($tempAR[$num]).conditions).Users).IncludeRoles -ne '') {
+        If (((($tempAR[$num]).conditions).Users).IncludeRoles -ne 'All') {
+            $UserIncludeRolesName = Get-AzureADObjectByObjectId -ObjectIds ((($tempAR[$num]).conditions).Users).IncludeRoles
+            $UserIncludeRolesName = ($UserIncludeRolesName).UserPrincipalName -join ","
+        }
+    }
     $UserExcludeRoles = ((($tempAR[$num]).conditions).Users).ExcludeRoles -join ','
+    If (((($tempAR[$num]).conditions).Users).ExcludeRoles -ne '') {
+        If (((($tempAR[$num]).conditions).Users).ExcludeRoles -ne 'All') {
+            $UserExcludeRolesName = Get-AzureADObjectByObjectId -ObjectIds ((($tempAR[$num]).conditions).Users).ExcludeRoles
+            $UserExcludeRolesName = ($UserExcludeRolesName).UserPrincipalName -join ","
+        }
+    }        
     $PlatformIncludePlatforms = ((($tempAR[$num]).conditions).Platforms).IncludePlatforms -join ','
     $PlatformExcludePlatforms = ((($tempAR[$num]).conditions).Platforms).ExcludePlatforms -join ','
     $LocationIncludeLocations = ((($tempAR[$num]).conditions).Locations).IncludeLocations -join ','
@@ -62,7 +97,7 @@ for ($num = 0 ; $num -le $count ; $num++) {
     $SignInFrequencyType = ((($tempAR[$num]).SessionControls).SignInFrequency).Type -join ','
     $SignInFrequencyValue = ((($tempAR[$num]).SessionControls).SignInFrequency).Value -join ','
 
-    $Policies += New-Object PSobject -Property @{
+    $Script:CAPolicies += New-Object PSobject -Property @{
         "Displayname" = $Displayname
         "State" = $State
         "ID" = $ID
@@ -80,11 +115,17 @@ for ($num = 0 ; $num -le $count ; $num++) {
         "ApplicationIncludeUserActions" = $ApplicationIncludeUserActions
         "ApplicationIncludeAuthenticationContextClassReferences" = $ApplicationIncludeAuthenticationContextClassReferences
         "UserIncludeUsers"  = $UserIncludeUsers
+        "UserIncludeUsersName"  = $UserIncludeUsersName
         "UserExcludeUsers"  = $UserExcludeUsers
+        "UserExcludeUsersName"  = $UserExcludeUsersName
         "UserIncludeGroups" = $UserIncludeGroups
+        "UserIncludeGroupsName" = $UserIncludeGroupsName
         "UserExcludeGroups" = $UserExcludeGroups
+        "UserExcludeGroupsName" = $UserExcludeGroupsName
         "UserIncludeRoles"  = $UserIncludeRoles
+        "UserIncludeRolesName"  = $UserIncludeRolesName
         "UserExcludeRoles" = $UserExcludeRoles
+        "UserExcludeRolesName" = $UserExcludeRolesName
         "PlatformIncludePlatforms"  = $PlatformIncludePlatforms
         "PlatformExcludePlatforms"  = $PlatformExcludePlatforms
         "LocationIncludeLocations"  = $LocationIncludeLocations
@@ -106,8 +147,5 @@ for ($num = 0 ; $num -le $count ; $num++) {
     }
 }
 
-
-
-
 # Export Data
-$Policies | export-csv -Path $exportFile -NoTypeInformation
+$CAPolicies | export-csv -Path $exportFile -NoTypeInformation
