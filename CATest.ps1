@@ -174,7 +174,6 @@ ForEach ($policy in $Script:CAPolicies) {
 #<#
 # Find MFA for All Users
 ForEach ($policy in $Script:CAPolicies) {
-    #Write-Host $policy.DisplayName
     If ($policy.GrantControlBuiltInControls.Contains('Mfa')) {
         If ($policy.clientAppTypes -eq 'ExchangeActiveSync,Browser,MobileAppsAndDesktopClients,Other') {
             If ($policy.ApplicationIncludeApplications -eq 'All') {
@@ -190,7 +189,6 @@ ForEach ($policy in $Script:CAPolicies) {
 <#
 # Find block legacy authentication 
 ForEach ($policy in $Script:CAPolicies) {
-    #Write-Host $policy.DisplayName
     If ($policy.GrantControlBuiltInControls.Contains('Block')) {
         If ($policy.clientAppTypes -eq 'ExchangeActiveSync,Other') {
             If ($policy.UserIncludeUsers.Contains('All')) {
