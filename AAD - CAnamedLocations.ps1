@@ -21,12 +21,16 @@ $Policies = @()
 $count = @(($tempAR).Displayname).Count
 $count = $count - 1
 for ($num = 0 ; $num -le $count ; $num++) {
-    $temp = (($tempAR[$num]).ipRanges).cidrAddress -join ','
+    $tempIP = (($tempAR[$num]).ipRanges).cidrAddress -join ','
+    $tempCR = (($tempAR[$num]).ipRanges).CountriesAndRegions -join ','
+    $tempIUCR = (($tempAR[$num]).ipRanges).IncludeUnknownCountriesAndRegions -join ','
     $Policies += New-Object PSobject -Property @{
         "Displayname"  = ($tempAR[$num]).displayName
         "isTrusted" = ($tempAR[$num]).isTrusted
         "ID"  = ($tempAR[$num]).id
-        "ipRanges" = $temp
+        "ipRanges" = $tempIP
+        "CountriesAndRegions" = $tempCR
+        "IncludeUnknownCountriesAndRegions" = $tempIUCR
     }
 }
 
