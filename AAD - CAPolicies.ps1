@@ -21,7 +21,6 @@ $Policies = @()
 $count = @(($tempAR).Displayname).Count
 $count = $count - 1
 for ($num = 0 ; $num -le $count ; $num++) {
-    $temp = (($tempAR[$num]).ipRanges).cidrAddress -join ','
     $Displayname  = ($tempAR[$num]).displayName -join ','
     $State = ($tempAR[$num]).state -join ','
     $ID  = ($tempAR[$num]).id -join ','
@@ -64,6 +63,9 @@ for ($num = 0 ; $num -le $count ; $num++) {
     $SignInFrequencyValue = ((($tempAR[$num]).SessionControls).SignInFrequency).Value -join ','
 
     $Policies += New-Object PSobject -Property @{
+        "Displayname" = $Displayname
+        "State" = $State
+        "ID" = $ID
         "createdDateTime" = $createdDateTime
         "ModifiedDateTime"  = $ModifiedDateTime
         "sessionControls"  = $sessionControls
