@@ -28,7 +28,7 @@ $sharePTURL = "https://$TenantSName-admin.sharepoint.com"
 #Connect-PnPOnline -Url $sharePTURL -PnPManagementShell # Run on first connection to Instance & Follow propmpts to configure
 #$Cred = Get-Credential
 #>
-$outputCsv = "C:\Temp\$(Get-Date -Format yyyy-MM-dd-HH-mm) - $TenantName - Users.csv" 
+$outputCsv = "C:\Temp\$(Get-Date -Format yyyy-MM-dd-HH-mm) - $TenantName - Admins.csv" 
 If ($mfaUsed -eq 'No') {
     Write-Host "Connecting to SharePoint Online - $sharePTURL"
     Connect-PnPOnline -Url $sharePTURL -Credentials $Cred
