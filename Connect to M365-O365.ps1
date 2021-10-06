@@ -27,6 +27,8 @@
             Install-Module -Name MCAS
             https://www.verboon.info/2019/05/exploring-microsoft-cloud-app-security-with-powershell-part1/
             https://docs.microsoft.com/en-us/cloud-app-security/api-authentication
+        Dependent on MS Commerce PowerShell Module
+            Install-Module -Name MSCommerce
         Dependent on X PowerShell Module
 
     Supported Tenants
@@ -359,6 +361,26 @@ $MCASUser=$MCASUrl
 $MCASPWord=ConvertTo-SecureString -String "$MCASToken" -AsPlainText -Force
 $CASCredential=New-Object -TypeName System.Management.Automation.PSCredential -argumentList $MCASUser, $MCASPWord
 $Credential=$CASCredential
+#>
+
+<#
+# Connect to Microsoft Commerce
+If ($mfaUsed -eq 'No') {
+    Write-Host "Connecting to Microsoft Commerce"
+    Connect-MSCommerce # -Credential $cred # Use if MFA is Not Used
+    #If ($TenantType -eq "Commercial") {Connect-MSCommerce -Credential $cred}
+    #If ($TenantType -eq "GCC") {Connect-MSCommerce -Credential $cred}
+    #If ($TenantType -eq "GCCH") {Connect-MSCommerce -Credential $cred -TeamsEnvironmentName TeamsGCCH}
+    #If ($TenantType -eq "DoD") {Connect-MSCommerce -Credential $cred -TeamsEnvironmentName TeamsDOD}
+}
+Else {
+    Write-Host "Connecting to Microsoft Commerce - MFA"
+    Connect-MSCommerce # Use if MFA is Used
+    #If ($TenantType -eq "Commercial") {Connect-MSCommerce}
+    #If ($TenantType -eq "GCC") {Connect-MSCommerce}
+    #If ($TenantType -eq "GCCH") {Connect-MSCommerce -TeamsEnvironmentName TeamsGCCH}
+    #If ($TenantType -eq "DoD") {Connect-MSCommerce -TeamsEnvironmentName TeamsDOD}
+}
 #>
 
 <#
