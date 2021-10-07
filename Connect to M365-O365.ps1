@@ -364,6 +364,8 @@ $Credential=$CASCredential
 #>
 
 <#
+# Can not Connect with stored Credentials
+# Need GA Access to view Settings
 # Connect to Microsoft Commerce
 If ($mfaUsed -eq 'No') {
     Write-Host "Connecting to Microsoft Commerce"
