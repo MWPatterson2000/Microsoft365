@@ -40,64 +40,96 @@
 #Connect-MsolService
 $temp = Get-MsolDomain -ErrorAction SilentlyContinue
 
-if($?) {Write-Host "You're connected to MSOL" }
-else {Write-Host "You're not connected to MSOL" }
+if($?) {
+	Write-Host "You're connected to MSOL"
+}
+else {
+	Write-Host "You're not connected to MSOL"
+}
 
 
 # Test Azure AD Connectivity
 #Connect-AzureAD 
 $temp = Get-AzureADTenantDetail -ErrorAction SilentlyContinue
 
-if($?) {Write-Host "You're connected to Azure AD" }
-else {Write-Host "You're not connected to Azure AD" }
+if($?) {
+	Write-Host "You're connected to Azure AD"
+}
+else {
+	Write-Host "You're not connected to Azure AD"
+}
 
 
 # Test Microsoft Exchange Online Connectivity
 #Connect-ExchangeOnline
 $temp = Get-OrganizationConfig -ErrorAction SilentlyContinue
 
-if($?) {Write-Host "You're connected to Microsoft Exchange Online" }
-else {Write-Host "You're not connected to Microsoft Exchange Online" }
+if($?) {
+	Write-Host "You're connected to Microsoft Exchange Online"
+}
+else {
+	Write-Host "You're not connected to Microsoft Exchange Online"
+}
 
 
 # Test Security & Compliance Center Connectivity
 #Connect-IPPSSession
 $temp = Get-ProtectionAlert -ErrorAction SilentlyContinue
 
-if($?) {Write-Host "You're connected to Security & Compliance Center" }
-else {Write-Host "You're not connected to Security & Compliance Center" }
+if($?) {
+	Write-Host "You're connected to Security & Compliance Center"
+}
+else {
+	Write-Host "You're not connected to Security & Compliance Center"
+}
 
 
 # Test SharePoint Online Connectivity
 #Connect-SPOService
 $temp = Get-SPOTenant -ErrorAction SilentlyContinue
 
-if($?) {Write-Host "You're connected to SharePoint Online" }
-else {Write-Host "You're not connected to SharePoint Online" }
+if($?) {
+	Write-Host "You're connected to SharePoint Online"
+}
+else {
+	Write-Host "You're not connected to SharePoint Online"
+}
 
 
 # Test Microsoft Teams Connectivity
 #Connect-MicrosoftTeams
 $temp = Get-CsOAuthConfiguration -ErrorAction SilentlyContinue
 
-if($?) {Write-Host "You're connected to Microsoft Teams" }
-else {Write-Host "You're not connected to Microsoft Teams" }
+if($?) {
+	Write-Host "You're connected to Microsoft Teams"
+}
+else {
+	Write-Host "You're not connected to Microsoft Teams"
+}
 
 
 # Test Microsoft Graph Connectivity
 # Connect-MSGraph
 $temp = Get-IntuneDeviceCompliancePolicy -ErrorAction SilentlyContinue
 
-if($?) {Write-Host "You're connected to Microsoft Graph" }
-else {Write-Host "You're not connected to Microsoft Graph" }
+if($?) {
+	Write-Host "You're connected to Microsoft Graph"
+}
+else {
+	Write-Host "You're not connected to Microsoft Graph"
+}
 
 
 # Test MCAS Connectivity
 <#
 $temp = Get-MsolDomain -ErrorAction SilentlyContinue
 
-if($?) {Write-Host "You're  connected to MSOL" }
-else {Write-Host "You're not connected to MSOL" }
+if($?) {
+	Write-Host "You're  connected to MSOL"
+}
+else {
+	Write-Host "You're not connected to MSOL"
+}
 #>
 
 
@@ -106,8 +138,12 @@ else {Write-Host "You're not connected to MSOL" }
 <#
 $temp = Get-MSCommerceProductPolicies -ErrorAction SilentlyContinue
 
-if($?) {Write-Host "You're  connected to MSOL" }
-else {Write-Host "You're not connected to MSOL" }
+if($?) {
+	Write-Host "You're  connected to MSOL"
+}
+else {
+	Write-Host "You're not connected to MSOL"
+}
 #>
 
 
