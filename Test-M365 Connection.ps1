@@ -39,7 +39,6 @@
 # Test MSOL Connectivity
 #Connect-MsolService
 $temp = Get-MsolDomain -ErrorAction SilentlyContinue
-
 if($?) {
 	Write-Host "You're connected to MSOL"
 }
@@ -51,7 +50,6 @@ else {
 # Test Azure AD Connectivity
 #Connect-AzureAD 
 $temp = Get-AzureADTenantDetail -ErrorAction SilentlyContinue
-
 if($?) {
 	Write-Host "You're connected to Azure AD"
 }
@@ -63,7 +61,6 @@ else {
 # Test Microsoft Exchange Online Connectivity
 #Connect-ExchangeOnline
 $temp = Get-OrganizationConfig -ErrorAction SilentlyContinue
-
 if($?) {
 	Write-Host "You're connected to Microsoft Exchange Online"
 }
@@ -75,7 +72,6 @@ else {
 # Test Security & Compliance Center Connectivity
 #Connect-IPPSSession
 $temp = Get-ProtectionAlert -ErrorAction SilentlyContinue
-
 if($?) {
 	Write-Host "You're connected to Security & Compliance Center"
 }
@@ -87,7 +83,6 @@ else {
 # Test SharePoint Online Connectivity
 #Connect-SPOService
 $temp = Get-SPOTenant -ErrorAction SilentlyContinue
-
 if($?) {
 	Write-Host "You're connected to SharePoint Online"
 }
@@ -99,7 +94,6 @@ else {
 # Test Microsoft Teams Connectivity
 #Connect-MicrosoftTeams
 $temp = Get-CsOAuthConfiguration -ErrorAction SilentlyContinue
-
 if($?) {
 	Write-Host "You're connected to Microsoft Teams"
 }
@@ -111,7 +105,6 @@ else {
 # Test Microsoft Graph Connectivity
 # Connect-MSGraph
 $temp = Get-IntuneDeviceCompliancePolicy -ErrorAction SilentlyContinue
-
 if($?) {
 	Write-Host "You're connected to Microsoft Graph"
 }
@@ -123,7 +116,6 @@ else {
 # Test MCAS Connectivity
 <#
 $temp = Get-MsolDomain -ErrorAction SilentlyContinue
-
 if($?) {
 	Write-Host "You're  connected to MSOL"
 }
@@ -137,7 +129,6 @@ else {
 #Connect-MSCommerce
 <#
 $temp = Get-MSCommerceProductPolicies -ErrorAction SilentlyContinue
-
 if($?) {
 	Write-Host "You're  connected to MSOL"
 }
