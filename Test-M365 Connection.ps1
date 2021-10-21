@@ -105,6 +105,7 @@ else {
 # Test Microsoft Graph Connectivity
 # Connect-MSGraph
 $temp = Get-IntuneDeviceCompliancePolicy -ErrorAction SilentlyContinue
+#$temp = Get-AzureADMSConditionalAccessPolicy -ErrorAction SilentlyContinue
 if($?) {
 	Write-Host "You're connected to Microsoft Graph"
 }
@@ -113,27 +114,27 @@ else {
 }
 
 
-# Test MCAS Connectivity
 <#
+# Test MCAS Connectivity
 $temp = Get-MsolDomain -ErrorAction SilentlyContinue
 if($?) {
-	Write-Host "You're  connected to MSOL"
+	Write-Host "You're connected to MCAS"
 }
 else {
-	Write-Host "You're not connected to MSOL"
+	Write-Host "You're not connected to MCAS"
 }
 #>
 
 
+<#
 # Test Microsoft Commerce Connectivity
 #Connect-MSCommerce
-<#
 $temp = Get-MSCommerceProductPolicies -ErrorAction SilentlyContinue
 if($?) {
-	Write-Host "You're  connected to MSOL"
+	Write-Host "You're connected to Microsoft Commerce"
 }
 else {
-	Write-Host "You're not connected to MSOL"
+	Write-Host "You're not connected to Microsoft Commerce"
 }
 #>
 
