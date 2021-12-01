@@ -17,7 +17,7 @@
             Install-Module -Name SharePointPnPPowerShellOnline
     	Dependent on Teams PowerShell Module
             Install-Module -Name MicrosoftTeams
-        Dependent on MS Graph PowerShell Module
+        Dependent on MS Graph PowerShell Module(s)
             Install-Module -Name Microsoft.Graph
             Install-Module -Name Microsoft.Graph.Intune
             Install-Module -Name Microsoft.Graph.Teams
@@ -29,6 +29,9 @@
             https://docs.microsoft.com/en-us/cloud-app-security/api-authentication
         Dependent on MS Commerce PowerShell Module
             Install-Module -Name MSCommerce
+        Dependent on Power Apps PowerShell Module(s)
+            Install-Module -Name Microsoft.PowerApps.Administration.PowerShell
+            Install-Module -Name Microsoft.PowerApps.PowerShell -AllowClobber
         Dependent on X PowerShell Module
 
     Supported Tenants
