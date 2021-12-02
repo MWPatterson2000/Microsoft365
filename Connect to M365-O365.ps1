@@ -29,7 +29,7 @@
             https://docs.microsoft.com/en-us/cloud-app-security/api-authentication
         Dependent on MS Commerce PowerShell Module
             Install-Module -Name MSCommerce
-        Dependent on Power Apps PowerShell Module(s)
+        Dependent on Microsoft Power Apps PowerShell Module(s)
             Install-Module -Name Microsoft.PowerApps.Administration.PowerShell
             Install-Module -Name Microsoft.PowerApps.PowerShell -AllowClobber
         Dependent on X PowerShell Module
@@ -389,16 +389,16 @@ Else {
 #>
 
 #<#
-# Connect to Power Apps
+# Connect to Microsoft Power Apps
 If ($mfaUsed -eq 'No') {
-    Write-Host "Connecting to Power Apps"
+    Write-Host "Connecting to Microsoft Power Apps"
     If ($TenantType -eq "Commercial") {Add-PowerAppsAccount -Username $cred.GetNetworkCredential().UserName -Password $cred.GetNetworkCredential().SecurePassword}
     If ($TenantType -eq "GCC") {Add-PowerAppsAccount -Endpoint usgov -Username $cred.GetNetworkCredential().UserName -Password $cred.GetNetworkCredential().SecurePassword}
     If ($TenantType -eq "GCCH") {Add-PowerAppsAccount -Endpoint usgovhigh -Username $cred.GetNetworkCredential().UserName -Password $cred.GetNetworkCredential().SecurePassword}
     If ($TenantType -eq "DoD") {Add-PowerAppsAccount -Endpoint dod -Username $cred.GetNetworkCredential().UserName -Password $cred.GetNetworkCredential().SecurePassword}
 }
 Else {
-    Write-Host "Connecting to Power Apps - MFA"
+    Write-Host "Connecting to Microsoft Power Apps - MFA"
     If ($TenantType -eq "Commercial") {Add-PowerAppsAccount}
     If ($TenantType -eq "GCC") {Add-PowerAppsAccount -Endpoint usgov}
     If ($TenantType -eq "GCCH") {Add-PowerAppsAccount -Endpoint usgovhigh}
