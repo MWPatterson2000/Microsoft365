@@ -305,9 +305,9 @@ If ($mfaUsed -eq 'No') {
     Write-Host "Connecting to SharePoint Online"
     #Connect-SPOService -Url https://<Tenant>-admin.sharepoint.com -Credential $cred
     #Connect-SPOService -Url https://yourdomainname-admin.sharepoint.com -Credential $cred
-    Connect-SPOService -Url $sharePTURL # Use if MFA is Not Used
+    #Connect-SPOService -Url $sharePTURL # Use if MFA is Not Used
     #Connect-SPOService -Url $sharePTURL -Credential $upn # Use if MFA is Not Used
-    #Connect-SPOService -Url $sharePTURL -Credential $cred # Use if MFA is Not Used
+    Connect-SPOService -Url $sharePTURL -Credential $cred # Use if MFA is Not Used
 }
 Else {
     Write-Host "Connecting to SharePoint Online - MFA"
