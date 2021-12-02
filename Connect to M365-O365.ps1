@@ -32,6 +32,8 @@
         Dependent on Microsoft Power Apps PowerShell Module(s)
             Install-Module -Name Microsoft.PowerApps.Administration.PowerShell
             Install-Module -Name Microsoft.PowerApps.PowerShell -AllowClobber
+        Dependent on Microsoft Power BI PowerShell Module(s)
+            Install-Module -Name MicrosoftPowerBIMgmt
         Dependent on X PowerShell Module
 
     Supported Tenants
@@ -405,6 +407,25 @@ Else {
     If ($TenantType -eq "DoD") {Add-PowerAppsAccount -Endpoint dod}
 }
 #>
+
+#<#
+# Connect to Microsoft Power BI
+If ($mfaUsed -eq 'No') {
+    Write-Host "Connecting to Microsoft Power BI"
+    If ($TenantType -eq "Commercial") {Connect-PowerBIServiceAccount -Credential $cred}
+    If ($TenantType -eq "GCC") {Connect-PowerBIServiceAccount -Environment USGov -Credential $cred}
+    If ($TenantType -eq "GCCH") {Connect-PowerBIServiceAccount -Environment USGovHigh -Credential $cred}
+    If ($TenantType -eq "DoD") {Connect-PowerBIServiceAccount -Environment USGovMil -Credential $cred}
+}
+Else {
+    Write-Host "Connecting to Microsoft Power BI - MFA"
+    If ($TenantType -eq "Commercial") {Add-PowerAppsAccount}
+    If ($TenantType -eq "GCC") {Connect-PowerBIServiceAccount -Environment USGov}
+    If ($TenantType -eq "GCCH") {Connect-PowerBIServiceAccount -Environment USGovHigh}
+    If ($TenantType -eq "DoD") {Connect-PowerBIServiceAccount -Environment USGovMil}
+}
+#>
+
 <#
 # Connect to 
 If ($mfaUsed -eq 'No') {
