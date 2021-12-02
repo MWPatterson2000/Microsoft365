@@ -375,19 +375,36 @@ If ($mfaUsed -eq 'No') {
     Connect-MSCommerce # -Credential $cred # Use if MFA is Not Used
     #If ($TenantType -eq "Commercial") {Connect-MSCommerce -Credential $cred}
     #If ($TenantType -eq "GCC") {Connect-MSCommerce -Credential $cred}
-    #If ($TenantType -eq "GCCH") {Connect-MSCommerce -Credential $cred -TeamsEnvironmentName TeamsGCCH}
-    #If ($TenantType -eq "DoD") {Connect-MSCommerce -Credential $cred -TeamsEnvironmentName TeamsDOD}
+    #If ($TenantType -eq "GCCH") {Connect-MSCommerce -Credential $cred}
+    #If ($TenantType -eq "DoD") {Connect-MSCommerce -Credential $cred}
 }
 Else {
     Write-Host "Connecting to Microsoft Commerce - MFA"
     Connect-MSCommerce # Use if MFA is Used
     #If ($TenantType -eq "Commercial") {Connect-MSCommerce}
     #If ($TenantType -eq "GCC") {Connect-MSCommerce}
-    #If ($TenantType -eq "GCCH") {Connect-MSCommerce -TeamsEnvironmentName TeamsGCCH}
-    #If ($TenantType -eq "DoD") {Connect-MSCommerce -TeamsEnvironmentName TeamsDOD}
+    #If ($TenantType -eq "GCCH") {Connect-MSCommerce}
+    #If ($TenantType -eq "DoD") {Connect-MSCommerce}
 }
 #>
 
+#<#
+# Connect to Power Apps
+If ($mfaUsed -eq 'No') {
+    Write-Host "Connecting to Power Apps"
+    If ($TenantType -eq "Commercial") {Add-PowerAppsAccount -Username $cred.GetNetworkCredential().UserName -Password $cred.GetNetworkCredential().SecurePassword}
+    If ($TenantType -eq "GCC") {Add-PowerAppsAccount -Endpoint usgov -Username $cred.GetNetworkCredential().UserName -Password $cred.GetNetworkCredential().SecurePassword}
+    If ($TenantType -eq "GCCH") {Add-PowerAppsAccount -Endpoint usgovhigh -Username $cred.GetNetworkCredential().UserName -Password $cred.GetNetworkCredential().SecurePassword}
+    If ($TenantType -eq "DoD") {Add-PowerAppsAccount -Endpoint dod -Username $cred.GetNetworkCredential().UserName -Password $cred.GetNetworkCredential().SecurePassword}
+}
+Else {
+    Write-Host "Connecting to Power Apps - MFA"
+    If ($TenantType -eq "Commercial") {Add-PowerAppsAccount}
+    If ($TenantType -eq "GCC") {Add-PowerAppsAccount -Endpoint usgov}
+    If ($TenantType -eq "GCCH") {Add-PowerAppsAccount -Endpoint usgovhigh}
+    If ($TenantType -eq "DoD") {Add-PowerAppsAccount -Endpoint dod}
+}
+#>
 <#
 # Connect to 
 If ($mfaUsed -eq 'No') {
