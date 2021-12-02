@@ -41,6 +41,7 @@
         GCC (Office 365 U.S. Government Commercial Cloud
         GCCH (Office 365 U.S. Government Commercial Cloud High
         DoD (Office 365 U.S. Government DoD) - IL5
+        Germany (Germany)
 
     For This script to connect to SharePointOnline the Following must be set.
     Set-SPOTenant -LegacyAuthProtocolsEnabled $true # Default # CIS Control 1.4 Recommends to Disable this
@@ -111,6 +112,7 @@ While ($select -lt 1 -or $select -gt 5) {
     Write-Host "`t 2`tGCC (Office 365 U.S. Government Commercial Cloud)" -Fore Cyan
     Write-Host "`t 3`tGCCH (Office 365 U.S. Government Commercial Cloud High)" -Fore Cyan
     Write-Host "`t 4`tDoD (Office 365 U.S. Government DoD)" -Fore Cyan
+    Write-Host "`t 5`tGermany (Germany)" -Fore Cyan
     Write-Host "`n`tExit" -Fore Yellow
     Write-Host "`t 9`tQuit" -Fore Cyan
     $select = Read-Host "`n`tEnter selection"
@@ -131,6 +133,9 @@ While ($select -lt 1 -or $select -gt 5) {
         $TenantType = "DoD" # Office 365 U.S. Government DoD
     }
     If ($select -eq '5') {
+        $TenantType = "Germany" # Germany
+    }
+    If ($select -gt '5') {
         Exit
     }
 }
@@ -144,7 +149,8 @@ $mfaUsed = 'No' # Use if MFA is Not Used
     $TenantType = "Commercial" # Commercial
     #$TenantType = "GCC" # Office 365 U.S. Government Commercial Cloud
     #$TenantType = "GCCH" # Office 365 U.S. Government Commercial Cloud High
-    #$TenantType = "DoD" # Office 365 U.S. Government DoD 
+    #$TenantType = "DoD" # Office 365 U.S. Government DoD
+    #$TenantType = "Germany" # (Germany)
 #>
 
 #<#
@@ -185,6 +191,7 @@ If ($mfaUsed -eq 'No') {
     #If ($TenantType -eq "DoD") {Connect-MsolService -Credential $cred -AzureEnvironment USGovernment}
     If ($TenantType -eq "GCCH") {Connect-MsolService -Credential $cred -AzureEnvironment AzureUSGovernmentCloud}
     If ($TenantType -eq "DoD") {Connect-MsolService -Credential $cred -AzureEnvironment AzureUSGovernmentCloud}
+    If ($TenantType -eq "Germany") {Connect-MsolService -Credential $cred -AzureEnvironment AzureGermanyCloud}
 }
 Else {
     Write-Host "Connecting to MSOL - MFA"
@@ -195,6 +202,7 @@ Else {
     #If ($TenantType -eq "DoD") {Connect-MsolService -AzureEnvironment USGovernment}
     If ($TenantType -eq "GCCH") {Connect-MsolService -AzureEnvironment AzureUSGovernmentCloud}
     If ($TenantType -eq "DoD") {Connect-MsolService -AzureEnvironment AzureUSGovernmentCloud}
+    If ($TenantType -eq "Germany") {Connect-MsolService -AzureEnvironment AzureGermanyCloud}
 }
 
 # Define Variables 2
@@ -221,6 +229,7 @@ If ($mfaUsed -eq 'No') {
     If ($TenantType -eq "GCC") {Connect-AzureAD -Credential $credd}
     If ($TenantType -eq "GCCH") {Connect-AzureAD -Credential $cred -AzureEnvironmentName AzureUSGovernment}
     If ($TenantType -eq "DoD") {Connect-AzureAD -Credential $cred -AzureEnvironmentName AzureUSGovernment}
+    If ($TenantType -eq "Germany") {Connect-AzureAD -Credential $cred -AzureEnvironmentName AzureGermanyCloud}
 }
 Else {
     Write-Host "Connecting to Azure AD - MFA"
@@ -229,6 +238,7 @@ Else {
     If ($TenantType -eq "GCC") {Connect-AzureAD}
     If ($TenantType -eq "GCCH") {Connect-AzureAD -AzureEnvironmentName AzureUSGovernment}
     If ($TenantType -eq "DoD") {Connect-AzureAD -AzureEnvironmentName AzureUSGovernment}
+    If ($TenantType -eq "Germany") {Connect-AzureAD -AzureEnvironmentName AzureGermanyCloud}
 }
 
 # Connect to Microsoft Exchange Online
@@ -239,6 +249,7 @@ If ($mfaUsed -eq 'No') {
     If ($TenantType -eq "GCC") {Connect-ExchangeOnline -Credential $cred}
     If ($TenantType -eq "GCCH") {Connect-ExchangeOnline -Credential $cred -ExchangeEnvironmentName O365USGovGCCHigh}
     If ($TenantType -eq "DoD") {Connect-ExchangeOnline -Credential $cred -ExchangeEnvironmentName O365USGovDoD}
+    If ($TenantType -eq "Germany") {Connect-ExchangeOnline -Credential $cred -ExchangeEnvironmentName O365GermanyCloud}
 }
 Else {
     Write-Host "Connecting to Exchange Online - MFA"
@@ -251,6 +262,7 @@ Else {
     #If ($TenantType -eq "GCC") {Connect-ExchangeOnline -UserPrincipalName $upn}
     #If ($TenantType -eq "GCCH") {Connect-ExchangeOnline -UserPrincipalName $upn -ExchangeEnvironmentName O365USGovGCCHigh}
     #If ($TenantType -eq "DoD") {Connect-ExchangeOnline -UserPrincipalName $upn -ExchangeEnvironmentName O365USGovDoD}
+    If ($TenantType -eq "Germany") {Connect-ExchangeOnline -ExchangeEnvironmentName O365GermanyCloud}
 }
 
 # Connect to Security & Compliance Center
@@ -279,6 +291,7 @@ If ($mfaUsed -eq 'No') {
     If ($TenantType -eq "GCCH") {Connect-IPPSSession -UserPrincipalName $upn -ConnectionUri https://ps.compliance.protection.office365.us/powershell-liveid/ -AzureADAuthorizationEndpointUri https://login.microsoftonline.us/common}
     If ($TenantType -eq "DoD") {Connect-IPPSSession -UserPrincipalName $upn -ConnectionUri https://l5.ps.compliance.protection.office365.us/powershell-liveid/ -AzureADAuthorizationEndpointUri https://login.microsoftonline.us/common}
     #>
+    If ($TenantType -eq "Germany") {Connect-IPPSSession -Credential $cred -ConnectionUri https://ps.compliance.protection.outlook.de/PowerShell-LiveID}
 }
 Else {
     Write-Host "Connecting to Security & Compliance Center - MFA"
@@ -289,6 +302,7 @@ Else {
     If ($TenantType -eq "DoD") {Connect-IPPSSession -ConnectionUri https://l5.ps.compliance.protection.office365.us/powershell-liveid/}
     #If ($TenantType -eq "GCCH") {Connect-IPPSSession UserPrincipalName -ConnectionUri https://ps.compliance.protection.office365.us/powershell-liveid/}
     #If ($TenantType -eq "DoD") {Connect-IPPSSession UserPrincipalName -ConnectionUri https://l5.ps.compliance.protection.office365.us/powershell-liveid/}
+    If ($TenantType -eq "Germany") {Connect-IPPSSession -ConnectionUri https://ps.compliance.protection.outlook.de/PowerShell-LiveID/}
 }
 
 # Connect to SharePoint Online
@@ -303,6 +317,7 @@ If ($TenantType -eq "GCCH") {$sharePTURL = "https://$TenantSName-admin.sharepoin
 #If ($TenantType -eq "DoD") {$sharePTURL = "https://$TenantSName-admin.sharepoint.us"}
 #If ($TenantType -eq "DoD") {$sharePTURL = "https://$TenantSName-admin.dps.mil"}
 If ($TenantType -eq "DoD") {$sharePTURL = "https://$TenantSName-admin.sharepoint-mil.us"}
+If ($TenantType -eq "Germany") {$sharePTURL = "https://$TenantSName-admin.sharepoint.com"}
 If ($mfaUsed -eq 'No') {
     Write-Host "Connecting to SharePoint Online"
     #Connect-SPOService -Url https://<Tenant>-admin.sharepoint.com -Credential $cred
@@ -326,6 +341,7 @@ If ($mfaUsed -eq 'No') {
     If ($TenantType -eq "GCC") {Connect-MicrosoftTeams -Credential $cred}
     If ($TenantType -eq "GCCH") {Connect-MicrosoftTeams -Credential $cred -TeamsEnvironmentName TeamsGCCH}
     If ($TenantType -eq "DoD") {Connect-MicrosoftTeams -Credential $cred -TeamsEnvironmentName TeamsDOD}
+    If ($TenantType -eq "Germany") {Connect-MicrosoftTeams -Credential $cred}
 }
 Else {
     Write-Host "Connecting to Microsoft Teams - MFA"
@@ -334,6 +350,7 @@ Else {
     If ($TenantType -eq "GCC") {Connect-MicrosoftTeams}
     If ($TenantType -eq "GCCH") {Connect-MicrosoftTeams -TeamsEnvironmentName TeamsGCCH}
     If ($TenantType -eq "DoD") {Connect-MicrosoftTeams -TeamsEnvironmentName TeamsDOD}
+    If ($TenantType -eq "Germany") {Connect-MicrosoftTeams}
 }
 
 # Connect to Microsoft Graph
@@ -346,6 +363,7 @@ If ($TenantType -eq "GCCH") {Update-MSGraphEnvironment -AuthUrl https://login.mi
 #If ($TenantType -eq "DoD") {Update-MSGraphEnvironment -AuthUrl https://portal.azure.us -GraphBaseUrl https://dod-graph.microsoft.us -GraphResourceId https://dod-graph.microsoft.us}
 #If ($TenantType -eq "DoD") {Update-MSGraphEnvironment -AuthUrl https://login.microsoftonline.com/common -GraphBaseUrl https://dod-graph.microsoft.us -GraphResourceId https://dod-graph.microsoft.us}
 If ($TenantType -eq "DoD") {Update-MSGraphEnvironment -AuthUrl https://login.microsoftonline.us/common -GraphBaseUrl https://dod-graph.microsoft.us -GraphResourceId https://dod-graph.microsoft.us}
+If ($TenantType -eq "Germany") {Update-MSGraphEnvironment -AuthUrl https://login.microsoftonline.com/common -GraphBaseUrl https://graph.microsoft.com -GraphResourceId https://graph.microsoft.com}
 If ($mfaUsed -eq 'No') {
     Write-Host "Connecting to Microsoft Graph"
     Connect-MSGraph -Credential $cred # Use if MFA is Not Used
@@ -379,6 +397,7 @@ If ($mfaUsed -eq 'No') {
     #If ($TenantType -eq "GCC") {Connect-MSCommerce -Credential $cred}
     #If ($TenantType -eq "GCCH") {Connect-MSCommerce -Credential $cred}
     #If ($TenantType -eq "DoD") {Connect-MSCommerce -Credential $cred}
+    #If ($TenantType -eq "Germany") {Connect-MSCommerce -Credential $cred}
 }
 Else {
     Write-Host "Connecting to Microsoft Commerce - MFA"
@@ -387,6 +406,7 @@ Else {
     #If ($TenantType -eq "GCC") {Connect-MSCommerce}
     #If ($TenantType -eq "GCCH") {Connect-MSCommerce}
     #If ($TenantType -eq "DoD") {Connect-MSCommerce}
+    #If ($TenantType -eq "Germany") {Connect-MSCommerce}
 }
 #>
 
@@ -398,6 +418,7 @@ If ($mfaUsed -eq 'No') {
     If ($TenantType -eq "GCC") {Add-PowerAppsAccount -Endpoint usgov -Username $cred.GetNetworkCredential().UserName -Password $cred.GetNetworkCredential().SecurePassword}
     If ($TenantType -eq "GCCH") {Add-PowerAppsAccount -Endpoint usgovhigh -Username $cred.GetNetworkCredential().UserName -Password $cred.GetNetworkCredential().SecurePassword}
     If ($TenantType -eq "DoD") {Add-PowerAppsAccount -Endpoint dod -Username $cred.GetNetworkCredential().UserName -Password $cred.GetNetworkCredential().SecurePassword}
+    If ($TenantType -eq "Germany") {Add-PowerAppsAccount -Username $cred.GetNetworkCredential().UserName -Password $cred.GetNetworkCredential().SecurePassword}
 }
 Else {
     Write-Host "Connecting to Microsoft Power Apps - MFA"
@@ -405,6 +426,7 @@ Else {
     If ($TenantType -eq "GCC") {Add-PowerAppsAccount -Endpoint usgov}
     If ($TenantType -eq "GCCH") {Add-PowerAppsAccount -Endpoint usgovhigh}
     If ($TenantType -eq "DoD") {Add-PowerAppsAccount -Endpoint dod}
+    If ($TenantType -eq "Germany") {Add-PowerAppsAccount}
 }
 #>
 
@@ -416,6 +438,7 @@ If ($mfaUsed -eq 'No') {
     If ($TenantType -eq "GCC") {Connect-PowerBIServiceAccount -Environment USGov -Credential $cred}
     If ($TenantType -eq "GCCH") {Connect-PowerBIServiceAccount -Environment USGovHigh -Credential $cred}
     If ($TenantType -eq "DoD") {Connect-PowerBIServiceAccount -Environment USGovMil -Credential $cred}
+    If ($TenantType -eq "Germany") {Connect-PowerBIServiceAccount -Environment Germany -Credential $cred}
 }
 Else {
     Write-Host "Connecting to Microsoft Power BI - MFA"
@@ -423,6 +446,7 @@ Else {
     If ($TenantType -eq "GCC") {Connect-PowerBIServiceAccount -Environment USGov}
     If ($TenantType -eq "GCCH") {Connect-PowerBIServiceAccount -Environment USGovHigh}
     If ($TenantType -eq "DoD") {Connect-PowerBIServiceAccount -Environment USGovMil}
+    If ($TenantType -eq "Germany") {Connect-PowerBIServiceAccount -Environment Germany}
 }
 #>
 
