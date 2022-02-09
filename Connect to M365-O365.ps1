@@ -80,12 +80,12 @@ function Get-OSVersion ($Name = '*') {
     $OSInfo = Get-WmiObject Win32_OperatingSystem | Select-Object *
     If (($OSInfo).Caption -like '*Microsoft Windows*') {
         Write-Host "You are using a Microsft Windows System, All tests will work correctly" #-ForegroundColor Yellow
-        #$OSInfo | Select-Object PSComputerName, Caption, OSArchitecture, Version, BuildNumber | Format-List
         $Linux = 'No'
+        #$OSInfo | Select-Object PSComputerName, Caption, OSArchitecture, Version, BuildNumber | Format-List
     }
     Else {
-        $Linux = 'Yes'
         Write-Host "You are using a Linux System, All tests will work correctly"
+        $Linux = 'Yes'
         <#
         Pause
         Get-UserVariable | Remove-Variable -ErrorAction SilentlyContinue -ForegroundColor Yellow
@@ -531,7 +531,7 @@ else {$Script:msolDomainName = $tenantDomain}
 # Connect to Other Services
 #Connect-ServiceMSOL
 #Connect-ServiceAAD
-#Connect-ServiceEXO
+Connect-ServiceEXO
 Connect-ServiceSCC # Do Not Call at this time, only called when needed
 #Connect-ServiceSPO
 #Connect-ServiceMSTeams
