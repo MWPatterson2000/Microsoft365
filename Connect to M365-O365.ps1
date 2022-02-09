@@ -79,13 +79,13 @@ Clear-Host
 function Get-OSVersion ($Name = '*') {
     $OSInfo = Get-WmiObject Win32_OperatingSystem | Select-Object *
     If (($OSInfo).Caption -like '*Microsoft Windows*') {
+        $Script:Linux = 'No'
         Write-Host "You are using a Microsft Windows System, All tests will work correctly" #-ForegroundColor Yellow
-        $Linux = 'No'
         #$OSInfo | Select-Object PSComputerName, Caption, OSArchitecture, Version, BuildNumber | Format-List
     }
     Else {
-        Write-Host "You are using a Linux System, All tests will work correctly"
-        $Linux = 'Yes'
+        $Script:Linux = 'Yes'
+        Write-Host "You are using a Linux System, All tests will not work correctly"
         <#
         Pause
         Get-UserVariable | Remove-Variable -ErrorAction SilentlyContinue -ForegroundColor Yellow
@@ -96,7 +96,7 @@ function Get-OSVersion ($Name = '*') {
 
 # Connect to O365 Needed for Variable creations
 function Connect-ServiceMSOL {
-    If ($Linux -eq 'No') {
+    If ($Script:Linux -eq 'No') {
         try {
             If ($mfaUsed -eq 'No') {
                 Write-Host "Connecting to MSOL"
@@ -131,8 +131,7 @@ function Connect-ServiceMSOL {
 }
 
 # Connect to AzureAD
-function Connect-ServiceAAD {
-    If ($Linux -eq 'No') {
+    If ($Script:Linux -eq 'No') {
         try {
             If ($mfaUsed -eq 'No') {
                 Write-Host "Connecting to Azure AD"
@@ -164,7 +163,7 @@ function Connect-ServiceAAD {
 
 # Connect to Microsoft Exchange Online
 function Connect-ServiceEXO {
-    If ($Linux -eq 'No') {
+    If ($Script:Linux -eq 'No') {
         try {
             If ($mfaUsed -eq 'No') {
                 Write-Host "Connecting to Exchange Online"
@@ -196,7 +195,7 @@ function Connect-ServiceEXO {
 
 # Connect to Security & Compliance Center
 function Connect-ServiceSCC {
-    If ($Linux -eq 'No') {
+    If ($Script:Linux -eq 'No') {
         If ($mfaUsed -eq 'No') {
             Write-Host "Connecting to Security & Compliance Center"
             #Connect-IPPSSession -Credential $cred # Use if MFA is Not Used
@@ -220,7 +219,7 @@ function Connect-ServiceSCC {
 
 # Connect to SharePoint Online
 function Connect-ServiceSPO {
-    If ($Linux -eq 'No') {
+    If ($Script:Linux -eq 'No') {
         # Build Connection String
         $TenantName = (Get-MsolDomain | Where-Object {$_.isInitial}).name
         $TenantSName = $TenantName.Substring(0,$TenantName.IndexOf('.'))
@@ -306,7 +305,7 @@ function Connect-ServiceMSGraph {
 
 # Connect to Microsoft Commerce
 function Connect-ServiceMSCommerce {
-    If ($Linux -eq 'No') {
+    If ($Script:Linux -eq 'No') {
         # Can not Connect with stored Credentials
         # Need GA Access to view Settings
         If ($mfaUsed -eq 'No') {
@@ -332,7 +331,7 @@ function Connect-ServiceMSCommerce {
 
 # Connect to Microsoft Power Apps
 function Connect-ServiceMSPowerApps {
-    If ($Linux -eq 'No') {
+    If ($Script:Linux -eq 'No') {
         # Need GA Access to view Settings
         If ($mfaUsed -eq 'No') {
             Write-Host "Connecting to Microsoft Power Apps"
@@ -355,7 +354,7 @@ function Connect-ServiceMSPowerApps {
 
 # Connect to Microsoft Power BI
 function Connect-ServiceMSPowerBI {
-    #If ($Linux -eq 'No') {
+    #If ($Script:Linux -eq 'No') {
     # Need GA Access to view Settings
     If ($mfaUsed -eq 'No') {
         Write-Host "Connecting to Microsoft Power BI"
@@ -408,6 +407,10 @@ function Disconnect-Services {
 
 # Functions - End
 
+# Check OS Version
+Get-OSVersion
+#Write-Host "Linux:"$Script:Linux
+
 #<#
 # Get Authentiction Type
 # Authentication Type
@@ -433,6 +436,7 @@ While ($select -lt 1 -or $select -gt 3) {
         Exit
     }
 }
+#Write-Host "MFA:"$mfaUsed
 #>
 
 #<#
@@ -472,7 +476,9 @@ While ($select -lt 1 -or $select -gt 5) {
         Exit
     }
 }
+#Write-Host "Tenant:"$TenantType
 #>
+
 Write-Host "`n`n`n"
 <#
 # Define Variables
@@ -514,14 +520,11 @@ If ($mfaUsed -eq 'Yes') {
 }
 #>
 
-# Check OS Version
-Get-OSVersion
-
 # Connect to MSOL Service
 Connect-ServiceMSOL
 
 # Script Variables
-If ($Linux -eq 'No') {
+If ($Script:Linux -eq 'No') {
     $TenantID = (Get-MsolCompanyInformation).ObjectId
     $Script:msolDomainName = (Get-MsolCompanyInformation).InitialDomain #'<Tanant>.onmicrosoft.com' # Microsoft 365 Tenant
     $InitialDomain = ($Script:msolDomainName).Split('.')[0]
@@ -531,7 +534,7 @@ else {$Script:msolDomainName = $tenantDomain}
 # Connect to Other Services
 #Connect-ServiceMSOL
 #Connect-ServiceAAD
-Connect-ServiceEXO
+#Connect-ServiceEXO
 Connect-ServiceSCC # Do Not Call at this time, only called when needed
 #Connect-ServiceSPO
 #Connect-ServiceMSTeams
