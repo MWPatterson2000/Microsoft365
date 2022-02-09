@@ -131,6 +131,7 @@ function Connect-ServiceMSOL {
 }
 
 # Connect to AzureAD
+function Connect-ServiceAAD {
     If ($Script:Linux -eq 'No') {
         try {
             If ($mfaUsed -eq 'No') {
@@ -201,8 +202,14 @@ function Connect-ServiceSCC {
             #Connect-IPPSSession -Credential $cred # Use if MFA is Not Used
             If ($TenantType -eq "Commercial") {Connect-IPPSSession -Credential $cred -ErrorAction Stop}
             If ($TenantType -eq "GCC") {Connect-IPPSSession -Credential $cred -ErrorAction Stop}
-            If ($TenantType -eq "GCCH") {Connect-IPPSSession -Credential $cred -ConnectionUri https://ps.compliance.protection.office365.us/powershell-liveid/ -ErrorAction Stop}
-            If ($TenantType -eq "DoD") {Connect-IPPSSession -Credential $cred -ConnectionUri https://l5.ps.compliance.protection.office365.us/powershell-liveid/ -ErrorAction Stop}
+            #If ($TenantType -eq "GCCH") {Connect-IPPSSession -Credential $cred -ConnectionUri https://ps.compliance.protection.office365.us/powershell-liveid/ -ErrorAction Stop}
+            #If ($TenantType -eq "DoD") {Connect-IPPSSession -Credential $cred -ConnectionUri https://l5.ps.compliance.protection.office365.us/powershell-liveid/ -ErrorAction Stop}
+            #If ($TenantType -eq "GCCH") {Connect-IPPSSession -UserPrincipalName $upn -Credential $cred -ConnectionUri https://ps.compliance.protection.office365.us/powershell-liveid/ -AzureADAuthorizationEndpointUri https://login.microsoftonline.us/common -ErrorAction Stop}
+            #If ($TenantType -eq "DoD") {Connect-IPPSSession -UserPrincipalName $upn -Credential $cred -ConnectionUri https://l5.ps.compliance.protection.office365.us/powershell-liveid/ -AzureADAuthorizationEndpointUri https://login.microsoftonline.us/common -ErrorAction Stop}
+            #If ($TenantType -eq "GCCH") {Connect-IPPSSession -Credential $cred -ConnectionUri https://ps.compliance.protection.office365.us/powershell-liveid/ -AzureADAuthorizationEndpointUri https://login.microsoftonline.us/common -ErrorAction Stop}
+            #If ($TenantType -eq "DoD") {Connect-IPPSSession -Credential $cred -ConnectionUri https://l5.ps.compliance.protection.office365.us/powershell-liveid/ -AzureADAuthorizationEndpointUri https://login.microsoftonline.us/common -ErrorAction Stop}
+            If ($TenantType -eq "GCCH") {Connect-IPPSSession -UserPrincipalName $upn -ConnectionUri https://ps.compliance.protection.office365.us/powershell-liveid/ -AzureADAuthorizationEndpointUri https://login.microsoftonline.us/common -ErrorAction Stop}
+            If ($TenantType -eq "DoD") {Connect-IPPSSession -UserPrincipalName $upn -ConnectionUri https://l5.ps.compliance.protection.office365.us/powershell-liveid/ -AzureADAuthorizationEndpointUri https://login.microsoftonline.us/common -ErrorAction Stop}
             If ($TenantType -eq "Germany") {Connect-IPPSSession -Credential $cred -ConnectionUri https://ps.compliance.protection.outlook.de/PowerShell-LiveID -ErrorAction Stop}
         }
         Else {
@@ -210,8 +217,12 @@ function Connect-ServiceSCC {
             #Connect-IPPSSession # Use if MFA is Used
             If ($TenantType -eq "Commercial") {Connect-IPPSSession -ErrorAction Stop}
             If ($TenantType -eq "GCC") {Connect-IPPSSession -ErrorAction Stop}
-            If ($TenantType -eq "GCCH") {Connect-IPPSSession -ConnectionUri https://ps.compliance.protection.office365.us/powershell-liveid/ -ErrorAction Stop}
-            If ($TenantType -eq "DoD") {Connect-IPPSSession -ConnectionUri https://l5.ps.compliance.protection.office365.us/powershell-liveid/ -ErrorAction Stop}
+            #If ($TenantType -eq "GCCH") {Connect-IPPSSession -ConnectionUri https://ps.compliance.protection.office365.us/powershell-liveid/ -ErrorAction Stop}
+            #If ($TenantType -eq "DoD") {Connect-IPPSSession -ConnectionUri https://l5.ps.compliance.protection.office365.us/powershell-liveid/ -ErrorAction Stop}
+            #If ($TenantType -eq "GCCH") {Connect-IPPSSession -ConnectionUri https://ps.compliance.protection.office365.us/powershell-liveid/ -AzureADAuthorizationEndpointUri https://login.microsoftonline.us/common -ErrorAction Stop}
+            #If ($TenantType -eq "DoD") {Connect-IPPSSession -ConnectionUri https://l5.ps.compliance.protection.office365.us/powershell-liveid/ -AzureADAuthorizationEndpointUri https://login.microsoftonline.us/common -ErrorAction Stop}
+            If ($TenantType -eq "GCCH") {Connect-IPPSSession -UserPrincipalName $upn -ConnectionUri https://ps.compliance.protection.office365.us/powershell-liveid/ -AzureADAuthorizationEndpointUri https://login.microsoftonline.us/common -ErrorAction Stop}
+            If ($TenantType -eq "DoD") {Connect-IPPSSession -UserPrincipalName $upn -ConnectionUri https://l5.ps.compliance.protection.office365.us/powershell-liveid/ -AzureADAuthorizationEndpointUri https://login.microsoftonline.us/common -ErrorAction Stop}
             If ($TenantType -eq "Germany") {Connect-IPPSSession -ConnectionUri https://ps.compliance.protection.outlook.de/PowerShell-LiveID/ -ErrorAction Stop}
         }
     }
@@ -533,39 +544,13 @@ else {$Script:msolDomainName = $tenantDomain}
 
 # Connect to Other Services
 #Connect-ServiceMSOL
-#Connect-ServiceAAD
-#Connect-ServiceEXO
-Connect-ServiceSCC # Do Not Call at this time, only called when needed
-#Connect-ServiceSPO
-#Connect-ServiceMSTeams
-#Connect-ServiceMSGraph
+Connect-ServiceAAD
+Connect-ServiceEXO
+#Connect-ServiceSCC # Do Not Call at this time, only called when needed
+Connect-ServiceSPO
+Connect-ServiceMSTeams
+Connect-ServiceMSGraph
 #Connect-ServiceMSCommerce # Not Credential passthrough currrently
 #Connect-ServiceMSPowerApps
 #Connect-ServiceMSPowerBI # Issues with Module and Arrays with Other Modules installed
 
-
-<#
-If ($TenantType -eq "GCCH") {$EXOOptions = New-PSSessionOption -ExchangeEnvironmentName O365USGovGCCHigh}
-If ($TenantType -eq "DoD") {$EXOOptions = New-PSSessionOption -ExchangeEnvironmentName O365USGovDoD}
-If ($TenantType -eq "Germany") {$EXOOptions = New-PSSessionOption -ExchangeEnvironmentName O365GermanyCloud}
-#>
-
-<#
-# Connect to O365
-#Connect-MsolService
-# Connect to Azure AD
-#Connect-AzureAD
-# Connect to Microsoft Exchange Online
-#Connect-ExchangeOnline -UserPrincipalName <User>@<Tenant>.onmicrosoft.com
-# Connect to Security & Compliance Center
-#Connect-IPPSSession -UserPrincipalName <User>@<Tenant>.onmicrosoft.com
-# Connect to SharePoint Online
-#Connect-SPOService -Url https://<Tenant>-admin.sharepoint.com
-#Connect-SPOService -Url $sharePTURL
-# Connect to Microsoft Teams
-#Connect-MicrosoftTeams
-# Connect to Microsoft Graph
-#Connect-MSGraph
-# Connect to Intune
-#Connect-MSGraph
-#>
