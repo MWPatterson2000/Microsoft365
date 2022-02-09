@@ -308,6 +308,10 @@ function Connect-ServiceMSTeams {
 
 # Connect to Microsoft Graph
 function Connect-ServiceMSGraph {
+    If (($TenantType -eq "GCCH") -or ($TenantType -eq "DoD")) {
+        Write-Host "IP Address needes to be in the list of valid address"
+    }
+    Else {
     #Update-MSGraphEnvironment -AuthUrl https://login.microsoftonline.com/common -GraphBaseUrl https://graph.microsoft.com -GraphResourceId https://graph.microsoft.com #-Quiet
     If ($TenantType -eq "Commercial") {Update-MSGraphEnvironment -AuthUrl https://login.microsoftonline.com/common -GraphBaseUrl https://graph.microsoft.com -GraphResourceId https://graph.microsoft.com}
     If ($TenantType -eq "GCC") {Update-MSGraphEnvironment -AuthUrl https://login.microsoftonline.com/common -GraphBaseUrl https://graph.microsoft.com -GraphResourceId https://graph.microsoft.com}
@@ -324,6 +328,7 @@ function Connect-ServiceMSGraph {
     Else {
         Write-Host "Connecting to Microsoft Graph - MFA"
         Connect-MSGraph -ErrorAction Stop # Use if MFA is Used
+    }
     }
 }
 
