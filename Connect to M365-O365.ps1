@@ -197,17 +197,20 @@ function Connect-ServiceEXO {
 # Connect to Security & Compliance Center
 function Connect-ServiceSCC {
     If ($Script:Linux -eq 'No') {
+        <#
         If ($mfaUsed -eq 'No') {
             Write-Host "Connecting to Security & Compliance Center"
             #Connect-IPPSSession -Credential $cred # Use if MFA is Not Used
-            If ($TenantType -eq "Commercial") {Connect-IPPSSession -Credential $cred -ErrorAction Stop}
-            If ($TenantType -eq "GCC") {Connect-IPPSSession -Credential $cred -ErrorAction Stop}
+            #If ($TenantType -eq "Commercial") {Connect-IPPSSession -Credential $cred -ErrorAction Stop}
+            #If ($TenantType -eq "GCC") {Connect-IPPSSession -Credential $cred -ErrorAction Stop}
             #If ($TenantType -eq "GCCH") {Connect-IPPSSession -Credential $cred -ConnectionUri https://ps.compliance.protection.office365.us/powershell-liveid/ -ErrorAction Stop}
             #If ($TenantType -eq "DoD") {Connect-IPPSSession -Credential $cred -ConnectionUri https://l5.ps.compliance.protection.office365.us/powershell-liveid/ -ErrorAction Stop}
             #If ($TenantType -eq "GCCH") {Connect-IPPSSession -UserPrincipalName $upn -Credential $cred -ConnectionUri https://ps.compliance.protection.office365.us/powershell-liveid/ -AzureADAuthorizationEndpointUri https://login.microsoftonline.us/common -ErrorAction Stop}
             #If ($TenantType -eq "DoD") {Connect-IPPSSession -UserPrincipalName $upn -Credential $cred -ConnectionUri https://l5.ps.compliance.protection.office365.us/powershell-liveid/ -AzureADAuthorizationEndpointUri https://login.microsoftonline.us/common -ErrorAction Stop}
             #If ($TenantType -eq "GCCH") {Connect-IPPSSession -Credential $cred -ConnectionUri https://ps.compliance.protection.office365.us/powershell-liveid/ -AzureADAuthorizationEndpointUri https://login.microsoftonline.us/common -ErrorAction Stop}
             #If ($TenantType -eq "DoD") {Connect-IPPSSession -Credential $cred -ConnectionUri https://l5.ps.compliance.protection.office365.us/powershell-liveid/ -AzureADAuthorizationEndpointUri https://login.microsoftonline.us/common -ErrorAction Stop}
+            If ($TenantType -eq "Commercial") {Connect-IPPSSession -UserPrincipalName $upn -ErrorAction Stop}
+            If ($TenantType -eq "GCC") {Connect-IPPSSession -UserPrincipalName $upn -ErrorAction Stop}
             If ($TenantType -eq "GCCH") {Connect-IPPSSession -UserPrincipalName $upn -ConnectionUri https://ps.compliance.protection.office365.us/powershell-liveid/ -AzureADAuthorizationEndpointUri https://login.microsoftonline.us/common -ErrorAction Stop}
             If ($TenantType -eq "DoD") {Connect-IPPSSession -UserPrincipalName $upn -ConnectionUri https://l5.ps.compliance.protection.office365.us/powershell-liveid/ -AzureADAuthorizationEndpointUri https://login.microsoftonline.us/common -ErrorAction Stop}
             If ($TenantType -eq "Germany") {Connect-IPPSSession -Credential $cred -ConnectionUri https://ps.compliance.protection.outlook.de/PowerShell-LiveID -ErrorAction Stop}
@@ -215,16 +218,26 @@ function Connect-ServiceSCC {
         Else {
             Write-Host "Connecting to Security & Compliance Center - MFA"
             #Connect-IPPSSession # Use if MFA is Used
-            If ($TenantType -eq "Commercial") {Connect-IPPSSession -ErrorAction Stop}
-            If ($TenantType -eq "GCC") {Connect-IPPSSession -ErrorAction Stop}
+            #If ($TenantType -eq "Commercial") {Connect-IPPSSession -ErrorAction Stop}
+            #If ($TenantType -eq "GCC") {Connect-IPPSSession -ErrorAction Stop}
             #If ($TenantType -eq "GCCH") {Connect-IPPSSession -ConnectionUri https://ps.compliance.protection.office365.us/powershell-liveid/ -ErrorAction Stop}
             #If ($TenantType -eq "DoD") {Connect-IPPSSession -ConnectionUri https://l5.ps.compliance.protection.office365.us/powershell-liveid/ -ErrorAction Stop}
             #If ($TenantType -eq "GCCH") {Connect-IPPSSession -ConnectionUri https://ps.compliance.protection.office365.us/powershell-liveid/ -AzureADAuthorizationEndpointUri https://login.microsoftonline.us/common -ErrorAction Stop}
             #If ($TenantType -eq "DoD") {Connect-IPPSSession -ConnectionUri https://l5.ps.compliance.protection.office365.us/powershell-liveid/ -AzureADAuthorizationEndpointUri https://login.microsoftonline.us/common -ErrorAction Stop}
+            #If ($TenantType -eq "Germany") {Connect-IPPSSession -ConnectionUri https://ps.compliance.protection.outlook.de/PowerShell-LiveID/ -ErrorAction Stop}
+            If ($TenantType -eq "Commercial") {Connect-IPPSSession -UserPrincipalName $upn -ErrorAction Stop}
+            If ($TenantType -eq "GCC") {Connect-IPPSSession -UserPrincipalName $upn -ErrorAction Stop}
             If ($TenantType -eq "GCCH") {Connect-IPPSSession -UserPrincipalName $upn -ConnectionUri https://ps.compliance.protection.office365.us/powershell-liveid/ -AzureADAuthorizationEndpointUri https://login.microsoftonline.us/common -ErrorAction Stop}
             If ($TenantType -eq "DoD") {Connect-IPPSSession -UserPrincipalName $upn -ConnectionUri https://l5.ps.compliance.protection.office365.us/powershell-liveid/ -AzureADAuthorizationEndpointUri https://login.microsoftonline.us/common -ErrorAction Stop}
-            If ($TenantType -eq "Germany") {Connect-IPPSSession -ConnectionUri https://ps.compliance.protection.outlook.de/PowerShell-LiveID/ -ErrorAction Stop}
+            If ($TenantType -eq "Germany") {Connect-IPPSSession -UserPrincipalName $upn -ConnectionUri https://ps.compliance.protection.outlook.de/PowerShell-LiveID/ -ErrorAction Stop}
         }
+        #>
+        Write-Host "Connecting to Security & Compliance Center"
+        If ($TenantType -eq "Commercial") {Connect-IPPSSession -UserPrincipalName $upn -ErrorAction Stop}
+        If ($TenantType -eq "GCC") {Connect-IPPSSession -UserPrincipalName $upn -ErrorAction Stop}
+        If ($TenantType -eq "GCCH") {Connect-IPPSSession -UserPrincipalName $upn -ConnectionUri https://ps.compliance.protection.office365.us/powershell-liveid/ -AzureADAuthorizationEndpointUri https://login.microsoftonline.us/common -ErrorAction Stop}
+        If ($TenantType -eq "DoD") {Connect-IPPSSession -UserPrincipalName $upn -ConnectionUri https://l5.ps.compliance.protection.office365.us/powershell-liveid/ -AzureADAuthorizationEndpointUri https://login.microsoftonline.us/common -ErrorAction Stop}
+        If ($TenantType -eq "Germany") {Connect-IPPSSession -Credential $cred -ConnectionUri https://ps.compliance.protection.outlook.de/PowerShell-LiveID -ErrorAction Stop}
     }
 }
 
