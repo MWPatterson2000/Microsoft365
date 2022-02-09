@@ -75,6 +75,25 @@
 # Clear Screen
 Clear-Host
 
+# Get OS Version
+function Get-OSVersion ($Name = '*') {
+    $OSInfo = Get-WmiObject Win32_OperatingSystem | Select-Object *
+    If (($OSInfo).Caption -like '*Microsoft Windows*') {
+        Write-Host "You are using a Microsft Windows System, All tests will work correctly" #-ForegroundColor Yellow
+        #$OSInfo | Select-Object PSComputerName, Caption, OSArchitecture, Version, BuildNumber | Format-List
+        $Linux = 'No'
+    }
+    Else {
+        $Linux = 'Yes'
+        Write-Host "You are using a Linux System, All tests will work correctly"
+        <#
+        Pause
+        Get-UserVariable | Remove-Variable -ErrorAction SilentlyContinue -ForegroundColor Yellow
+        Break
+        #>
+    }
+}
+
 # Connect to O365 Needed for Variable creations
 function Connect-ServiceMSOL {
     If ($Linux -eq 'No') {
@@ -494,6 +513,20 @@ If ($mfaUsed -eq 'Yes') {
     #$cred = New-Object -TypeName System.Management.Automation.PSCredential -argumentlist $userName, $(convertto-securestring $Password -asplaintext -force)
 }
 #>
+
+# Check OS Version
+Get-OSVersion
+
+# Connect to MSOL Service
+Connect-ServiceMSOL
+
+# Script Variables
+If ($Linux -eq 'No') {
+    $TenantID = (Get-MsolCompanyInformation).ObjectId
+    $Script:msolDomainName = (Get-MsolCompanyInformation).InitialDomain #'<Tanant>.onmicrosoft.com' # Microsoft 365 Tenant
+    $InitialDomain = ($Script:msolDomainName).Split('.')[0]
+}
+else {$Script:msolDomainName = $tenantDomain}
 
 # Connect to Other Services
 #Connect-ServiceMSOL
