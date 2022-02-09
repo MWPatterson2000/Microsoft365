@@ -1,6 +1,6 @@
 <#
     .SYNOPSIS
-    This script will look at a M365/O365 Tenant and report on CIS Benchmarks
+    This script will connect to all M365/O365 Services in a Tenant
     
     .DESCRIPTION
     This will Connect to a M365/O365 Tenant
