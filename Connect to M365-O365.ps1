@@ -37,10 +37,10 @@
         Dependent on X PowerShell Module
 
     Supported Tenants
-        Commercial (Worldwide)
-        GCC (Office 365 U.S. Government Commercial Cloud
-        GCCH (Office 365 U.S. Government Commercial Cloud High
-        DoD (Office 365 U.S. Government DoD) - IL5
+        Commercial (Worldwide) - DoD Impact Level - N/A
+        GCC (Office 365 U.S. Government Commercial Cloud - DoD Impact Level (IL) 2
+        GCCH (Office 365 U.S. Government Commercial Cloud High - DoD Impact Level (IL) 4
+        DoD (Office 365 U.S. Government DoD) - DoD Impact Level (IL) 5
         Germany (Germany)
 
     For This script to connect to SharePointOnline the Following must be set.
@@ -475,9 +475,9 @@ $select = 0
 While ($select -lt 1 -or $select -gt 5) {
     Write-Host "`n`tSelect Microsoft 365 Tenant Type" -Fore Yellow
     Write-Host "`t 1`tCommercial (Worldwide)" -Fore Cyan
-    Write-Host "`t 2`tGCC (Office 365 U.S. Government Commercial Cloud)" -Fore Cyan
-    Write-Host "`t 3`tGCCH (Office 365 U.S. Government Commercial Cloud High)" -Fore Cyan
-    Write-Host "`t 4`tDoD (Office 365 U.S. Government DoD)" -Fore Cyan
+    Write-Host "`t 2`tGCC (Office 365 U.S. Government Commercial Cloud - IL2)" -Fore Cyan
+    Write-Host "`t 3`tGCCH (Office 365 U.S. Government Commercial Cloud High - IL4)" -Fore Cyan
+    Write-Host "`t 4`tDoD (Office 365 U.S. Government DoD - IL5)" -Fore Cyan
     Write-Host "`t 5`tGermany (Germany)" -Fore Cyan
     Write-Host "`n`tExit" -Fore Yellow
     Write-Host "`t 9`tQuit" -Fore Cyan
