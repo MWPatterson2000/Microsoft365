@@ -18,36 +18,33 @@ scripts@mwpatterson.com
 
 Revision History
     2022-09-13 - Initial Release
+    2026-08-01 - Consolidated endpoint downloads into a single loop to reduce duplicated code and memory churn
 
 #>
 
 # Get Date & Backup Locations
-$date = get-date -Format "yyyy-MM-dd-HH-mm"
-$backupRoot = "C:\" #Can use another drive if available
-$backupFolder = "Temp\M365Endpoints\"
+$date = get-date -Format 'yyyy-MM-dd-HH-mm'
+$backupRoot = 'C:\' #Can use another drive if available
+$backupFolder = 'Temp\M365Endpoints\'
 $backupFolderPath = $backupRoot + $backupFolder
 #$backupFileName = $date + "-" + $env:USERDNSDOMAIN #Full Domain Name 
 #$backupPath = $backupFolderPath + $backupFileName
 
-# Office 365 endpoints: Office 365 Worldwide (+GCC)
-$backupFileName = $date + "-" + "Office 365 Worldwide (+GCC).json" #Full Domain Name 
-$backupPath = $backupFolderPath + $backupFileName
-#Invoke-WebRequest -Uri https://endpoints.office.com/endpoints/worldwide?clientrequestid=b10c5ed1-bad1-445f-b386-b919946339a7 | ConvertFrom-Json # Office 365 endpoints: Office 365 Worldwide (+GCC)
-$tempAR = Invoke-WebRequest -Uri https://endpoints.office.com/endpoints/worldwide?clientrequestid=b10c5ed1-bad1-445f-b386-b919946339a7 | ConvertFrom-Json # Office 365 endpoints: Office 365 Worldwide (+GCC)
-$tempAR | ConvertTo-Json | Out-File $backupPath
+$endpointDefinitions = @(
+    [pscustomobject]@{ Name = 'Office 365 Worldwide (+GCC)'; Uri = 'https://endpoints.office.com/endpoints/worldwide?clientrequestid=b10c5ed1-bad1-445f-b386-b919946339a7'; FileName = 'Office 365 Worldwide (+GCC).json' },
+    [pscustomobject]@{ Name = 'Office 365 U.S. Government GCC High'; Uri = 'https://endpoints.office.com/endpoints/USGOVGCCHigh?clientrequestid=b10c5ed1-bad1-445f-b386-b919946339a7'; FileName = 'Office 365 U.S. Government GCC High.json' },
+    [pscustomobject]@{ Name = 'Office 365 U.S. Government DoD'; Uri = 'https://endpoints.office.com/endpoints/USGOVDoD?clientrequestid=b10c5ed1-bad1-445f-b386-b919946339a7'; FileName = 'Office 365 U.S. Government DoD.json' }
+)
 
-# Office 365 endpoints: Office 365 U.S. Government GCC High
-$backupFileName = $date + "-" + "Office 365 U.S. Government GCC High.json" #Full Domain Name 
-$backupPath = $backupFolderPath + $backupFileName
-#Invoke-WebRequest -Uri https://endpoints.office.com/endpoints/USGOVGCCHigh?clientrequestid=b10c5ed1-bad1-445f-b386-b919946339a7 | ConvertFrom-Json # Office 365 endpoints: Office 365 U.S. Government GCC High
-$tempAR = Invoke-WebRequest -Uri https://endpoints.office.com/endpoints/USGOVGCCHigh?clientrequestid=b10c5ed1-bad1-445f-b386-b919946339a7 | ConvertFrom-Json # Office 365 endpoints: Office 365 U.S. Government GCC High
-$tempAR | ConvertTo-Json | Out-File $backupPath
+if (-not (Test-Path -LiteralPath $backupFolderPath)) {
+    New-Item -Path $backupFolderPath -ItemType Directory -Force | Out-Null
+}
 
-# Office 365 endpoints: Office 365 U.S. Government DoD
-$backupFileName = $date + "-" + "Office 365 U.S. Government DoD.json" #Full Domain Name 
-$backupPath = $backupFolderPath + $backupFileName
-#Invoke-WebRequest -Uri https://endpoints.office.com/endpoints/USGOVDoD?clientrequestid=b10c5ed1-bad1-445f-b386-b919946339a7 | ConvertFrom-Json # Office 365 endpoints: Office 365 U.S. Government DoD
-$tempAR = Invoke-WebRequest -Uri https://endpoints.office.com/endpoints/USGOVDoD?clientrequestid=b10c5ed1-bad1-445f-b386-b919946339a7 | ConvertFrom-Json # Office 365 endpoints: Office 365 U.S. Government DoD
-$tempAR | ConvertTo-Json | Out-File $backupPath
+foreach ($endpoint in $endpointDefinitions) {
+    $backupFileName = $date + '-' + $endpoint.FileName
+    $backupPath = Join-Path -Path $backupFolderPath -ChildPath $backupFileName
+    $endpointData = Invoke-RestMethod -Uri $endpoint.Uri -Method Get
+    $endpointData | ConvertTo-Json -Depth 20 | Out-File -FilePath $backupPath -Encoding utf8
+}
 
 

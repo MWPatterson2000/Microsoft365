@@ -10,6 +10,7 @@ Revision History
     2019-04-10 - Initial Release
     2019-04-10 - Cleaunp
     2022-01-11 - Cleanup
+    2026-08-01 - Streamlined export handling to avoid unnecessary object retention
 
 #>
 
@@ -23,34 +24,40 @@ Revision History
 # Get Date & Log Locations
 $date = get-date -Format "yyyy-MM-dd-HH-mm"
 $logRoot = "C:\"
-$logFolder = "Temp\"
-#$logFolderPath = $logRoot +$logFolder
+$logFolder = "Temp"
+$logFolderPath = Join-Path -Path $logRoot -ChildPath $logFolder
 $logFile = "SharePointOnlineReport.csv"
 $logFile2 = "SharePointOnlineReport-Full.csv"
-#$logFileName = $date +"-" +$logFile 
-#$logFileName2 = $date +"-" +$logFile2 
-$logPath = $logRoot +$logFolder +$date +"-" +$logFile
-$logPath2 = $logRoot +$logFolder +$date +"-" +$logFile2
+$logPath = Join-Path -Path $logFolderPath -ChildPath ($date + "-" + $logFile)
+$logPath2 = Join-Path -Path $logFolderPath -ChildPath ($date + "-" + $logFile2)
 #>
+
+if (-not (Test-Path -LiteralPath $logFolderPath)) {
+    New-Item -Path $logFolderPath -ItemType Directory -Force | Out-Null
+}
 
 #<#
 # Limited Report
 # Get OneDrive for Business Sites
-$SharePointSites = Get-SpoSite -Limit All |
+$exportParams = @{
+    NoTypeInformation = $true
+    Path = $logPath
+}
+Get-SpoSite -Limit All |
     Select-Object @{N='UserName';E={$_.Title}},
     @{N='PersonalUrl';E={$_.Url}},
-    #@{Name="Created";Expression={$_.RootWeb.Created}},
     Owner, Status, LastContentModifiedDate, StorageUsageCurrent, StorageQuota, SharingCapability |
-    Export-csv -notype $logPath
+    Export-Csv @exportParams
 #>
 
 #<#
 # Full Report
 # Get OneDrive for Business Sites
-#$SharePointSites = Get-SpoSite -Limit All -Detailed |
-$SharePointSites = Get-SpoSite -Limit All |
-    Select-Object * | 
-    Export-csv -notype $logPath2
+$exportParams = @{
+    NoTypeInformation = $true
+    Path = $logPath2
+}
+Get-SpoSite -Limit All |
+    Select-Object * |
+    Export-Csv @exportParams
 #>
-
-#Write-Host $SharePointSites
